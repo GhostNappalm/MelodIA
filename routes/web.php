@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\NavController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Route::get('/', [NavController::class,'home'])->name('home');
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
+
+Route::get('/home', [NavController::class, 'home'])->name('home');
+Route::get('/games', [NavController::class, 'Games'])->name('games');
