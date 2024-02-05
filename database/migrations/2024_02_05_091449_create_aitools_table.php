@@ -6,12 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
     public function up(): void
     {
-        Schema::create('games', function (Blueprint $table) {
+        Schema::create('aitools', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->text('image_path');
+            $table->string('name');
+            $table->string('autors');
+            $table->text('description');
+            $table->json('inputs')->nullable();
             $table->timestamps();
         });
     }
@@ -19,6 +22,6 @@ return new class extends Migration
     
     public function down(): void
     {
-        Schema::dropIfExists('games');
+        Schema::dropIfExists('aitools');
     }
 };

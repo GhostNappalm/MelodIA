@@ -67,6 +67,13 @@
                     </form>
                 </div>
             </div>
+
+            <div class="card" style="margin-top:1rem">
+                <div class="row justify-content-center">
+                    <div class="text-center">Don't have an account? </div>
+                    <a class="text-center" id="register" href="{{ route('register')}}"><span style="font-weight: bold;">Sign up</span></a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

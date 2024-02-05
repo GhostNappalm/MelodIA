@@ -8,10 +8,13 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('games', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('email')->unique();
             $table->string('name')->unique();
-            $table->text('image_path');
+            $table->string('password');
+            $table->string('remember_token')->nullable();
+            $table->date('email_verified_at')->nullable();;
             $table->timestamps();
         });
     }
@@ -19,6 +22,6 @@ return new class extends Migration
     
     public function down(): void
     {
-        Schema::dropIfExists('games');
+        Schema::dropIfExists('users');
     }
 };
