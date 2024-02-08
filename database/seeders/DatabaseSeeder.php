@@ -17,6 +17,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             AItoolSeeder::class,
             GameAitoolSeeder::class,
+            GameUserSeeder::class,
+            AitoolUserSeeder::class,
+            ChartHistorySeeder::class,
         ]);
     }
 }

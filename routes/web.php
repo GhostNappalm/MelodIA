@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NavController;
 use App\Http\Controllers\Auth\LoginRegisterController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,6 +23,8 @@ Route::get('/', function () {
 Route::controller(NavController::class)->group(function() {
     Route::get('/home','home')->name('home');
     Route::get('/games','Games')->name('games');
+    Route::get('/chartGenerators','AiTools')->name('aitools');
+    Route::get('/{name}/chartGenerators','GameAiTools')->name('gameAitools');
 });
 
 Route::controller(LoginRegisterController::class)->group(function() {
@@ -34,3 +37,14 @@ Route::controller(LoginRegisterController::class)->group(function() {
 });
 
 Auth::routes();
+Route::group(['middleware' => 'auth'], function () { 
+
+    Route::controller(UserController::class)->group(function() {
+        
+        Route::get('/{name}/history','history')->name('history');
+        Route::get('download/chart/{id}', 'downloadChart')->name('download.chart');
+        Route::post('/fav_flag','fav_flag')->name('fav_flag');
+    });
+
+
+});

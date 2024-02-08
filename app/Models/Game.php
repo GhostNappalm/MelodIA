@@ -12,11 +12,18 @@ class Game extends Model
 
     protected $fillable =[
         'name',
+        'description',
         'image_path',
     ];
 
     public function aitools()
     {
-        return $this->belongsToMany(AItool::class, 'game_aitool', 'game_id', 'aitool_id');
+        return $this->belongsToMany(Aitool::class, 'game_aitool');
+    }
+    
+
+    public function N_aitools()
+    {
+        return $this->belongsToMany(Aitool::class, 'game_aitool')->count();
     }
 }

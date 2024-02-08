@@ -16,21 +16,26 @@ class GameSeeder extends Seeder
 
         Game::create([
             'name' => 'StepMania',
+            'description' => 'Game description',
             'image_path' => 'SM_img.jpg' 
+            
         ]);
 
         Game::create([
             'name' => 'osu!',
+            'description' => 'Game description',
             'image_path' => 'osu!_img.png' 
         ]);
 
         Game::create([
             'name' => 'InTheGroove 3',
+            'description' => 'Game description',
             'image_path' => 'ITG3_img.png' 
         ]);
 
         Game::create([
             'name' => 'osu!taiko',
+            'description' => 'Game description',
             'image_path' => 'osu!taiko_img.jpg' 
         ]);
     }

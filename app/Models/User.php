@@ -42,4 +42,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function favGames()
+    {
+        return $this->belongsToMany(Game::class, 'game_user');
+    }
+
+    public function favAitools()
+    {
+        return $this->belongsToMany(Aitool::class, 'aitool_user');
+    }
+
+    public function chartHistory()
+    {
+        return $this->hasMany(ChartHistory::class);
+    }
 }
