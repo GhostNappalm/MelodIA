@@ -43,7 +43,9 @@ Route::group(['middleware' => 'auth'], function () {
         
         Route::get('/{name}/history','history')->name('history');
         Route::get('download/chart/{id}', 'downloadChart')->name('download.chart');
-        Route::post('/fav_flag','fav_flag')->name('fav_flag');
+        Route::post('/favAitool_flag','favAitool_flag')->name('favAitool_flag');
+        Route::post('/favGame_flag','favGame_flag')->name('favGame_flag');
+        
     });
 
 

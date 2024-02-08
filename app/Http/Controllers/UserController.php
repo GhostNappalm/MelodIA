@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\ChartHistory;
-use App\Models\User;
 use App\Models\Game;
-
+use App\Models\Aitool;
 
 
 class UserController extends Controller
@@ -29,19 +28,35 @@ class UserController extends Controller
         return response()->download($filePath, $chart->file_name);
     }
 
-    public function fav_flag(Request $request)
+    public function favGame_flag(Request $request)
     {
         $user = Auth::user();
         $game_id = $request->input('game_id');
-        $game = Game::findOrFail($game_id);
+        $game = Game::find($game_id);
 
-        // Controlla se il gioco è già nei preferiti dell'utente
-        if ($user->favgames()->find($game_id)) {
-            $user->favGames()->detach($game);
-            return response()->json(['message' => 'Game removed from favorites']);
-        } else {
-            $user->favGames()->attach($game);
-            return response()->json(['message' => 'Game added to favorites']);
-        }    
+            if ($user->favgames()->find($game_id)) {
+                $user->favGames()->detach($game);
+                return response()->json(['message' => 'Game removed from favorites','state' => '1']);
+            } else {
+                $user->favGames()->attach($game);
+                return response()->json(['message' => 'Game added to favorites','state' => '0']);
+            }
+
+    }
+
+    public function favAitool_flag(Request $request)
+    {
+        $user = Auth::user();
+        $aitool_id = $request->input('aitool_id');
+        $aitool = Aitool::find($aitool_id);
+
+            if ($user->favAitools()->find($aitool_id)) {
+                $user->favAitools()->detach($aitool);
+                return response()->json(['message' => 'Game removed from favorites','state' => '1']);
+            } else {
+                $user->favAitools()->attach($aitool);
+                return response()->json(['message' => 'Game added to favorites','state' => '0']);
+            }
+
     }
 }
