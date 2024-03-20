@@ -78,7 +78,7 @@
             </div>
             <div class="col-sm">
                 <div class="col" style="display: inline-block;"><div class="process-arrow">3</div></div>
-                <p class="par">Export or Edit the File</p>
+                <p class="par">Fill the Input Fields and Generate your Chart</p>
             </div>
         </div>
         <div class="par" style="margin-top: 2rem;">

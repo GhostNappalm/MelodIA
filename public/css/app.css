@@ -21,15 +21,26 @@ body {
   line-height: 1.5em;
   padding: 0;
   margin: 0;
+  
 }
 
+footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+
 section {
-  height: 100vh;
+  height: auto;
 }
 
 body {
   background-color: #fef8f8;
 }
+
+
 
 /*-------------Helpers-------------*/
 .skew {
@@ -132,7 +143,14 @@ a:hover {
   padding-right: 2em;
 }
 
-@media (min-width: 800px) {
+.dropdown {
+  position: relative;
+  display: none;
+  min-width: 10rem;
+  padding-right: 1.3em;
+}
+
+@media (min-width: 900px) {
   #nav-wrapper {
     overflow: hidden;
   }
@@ -185,6 +203,14 @@ a:hover {
     background: #ddd;
     background: linear-gradient(45deg, #fff, #ddd);
   }
+
+  .dropdownMobile{
+    display:none;
+  }
+
+  .dropdown{
+    display:inline-block;
+  }
 }
 @keyframes logo-hover {
   20% {
@@ -206,12 +232,7 @@ a:hover {
   cursor: pointer;
 }
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-  min-width: 10rem;
-  padding-right: 1.3em;
-}
+
 
 .dropdown-content {
   display: none;

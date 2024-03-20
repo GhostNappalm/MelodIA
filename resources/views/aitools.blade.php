@@ -26,66 +26,38 @@ body {
   margin: 7rem 5vw;
   padding: 0;
   list-style-type: none;
+  
 }
 
 .card {
   position: relative;
-  display: block;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+
+  margin-right:0.5rem;
+  margin-left:0.5rem;
   height: 100%;  
   border-radius: calc(var(--curve) * 1px);
   overflow: hidden;
   text-decoration: none;
-}
-
-.card__image {      
-  width: 100%;
-  height: auto;
-}
-
-.card__overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;      
-  border-radius: calc(var(--curve) * 1px);    
-  background-color: var(--surface-color);      
-  transform: translateY(100%);
-  transition: .2s ease-in-out;
-}
-
-.card:hover .card__overlay {
-  transform: translateY(0);
+  transition: transform 0.3s ease-in-out;
 }
 
 .card__header {
   position: relative;
   display: flex;
+  padding:1rem;
   align-items: center;
   gap: 2em;
-  padding: 2em;
   border-radius: calc(var(--curve) * 1px) 0 0 0;    
   background-color: var(--surface-color);
-  transform: translateY(-100%);
-  transition: .2s ease-in-out;
-}
 
-.card__arc {
-  width: 80px;
-  height: 80px;
-  position: absolute;
-  bottom: 100%;
-  right: 0;      
-  z-index: 1;
-}
+} 
 
-.card__arc path {
-  fill: var(--surface-color);
-  d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
-}       
-
-.card:hover .card__header {
-  transform: translateY(0);
+.card:hover  {
+  transform: scale(1.1);
+  text-decoration:none;
 }
 
 .card__thumb {
@@ -113,34 +85,32 @@ body {
   font-size: .8em;
   color: #D7BDCA;
 }
+   
 
-.card__description {
-  padding: 0 2em 2em;
-  margin: 0;
-  color: #D7BDCA;
-  font-family: "MockFlowFont";   
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-  overflow: hidden;
-}    
 </style>
 
 
 @if($game!='0')
-  <h1>{{ $game['name']}}</h1>
+<div style="text-align: center; margin: 3rem;">
+    <h1 style="color: #6A515E; font-family: 'Noto Sans JP', sans-serif;">{{ $game['name']}}</h1>
+    <p style="font-family: 'Noto Sans JP', sans-serif;">{{ $game['description']}}</p>
+</div>
+
 @endif
 
+<div class="container-fluid" style="max-width: 50rem;">
+  <div class="input-group">
+    <input id="searchInput" class="form-control me-2" type="search" autocomplete="off" placeholder="Search generators by name or file extension" aria-label="Search" >
+  </div>
+</div>
 
 <ul class="cards" style="">
-
-
 @foreach($aitools as $aitool)
-  <li>
-    <a href="" class="card" style=" width: 20rem; height:10rem;">
-      <div class="card__overlay">
+  <li class="card-container">
+    <a href="{{ route('Aitool',['name'=>$aitool['name']])}}" class="card" style=" height:7rem;">
+
         <div class="card__header">
-          <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>                     
+                             
           @if(Auth::check())
             
             <button type="button" class="btn btn-outline-danger favoriteButton  bi 
@@ -156,12 +126,13 @@ body {
           @endif
           
           <div class="card__header-text">
-            <h3 class="card__title">{{ $aitool['name']}}</h3>            
-            <span class="card__status">{{ $aitool['authors']}}</span>
+            <h3 class="card__title">{{ $aitool['name'] }}</h3>            
+            <span class="card__status">{{ $aitool['authors'] }}</span>
+            <p class="hidden" style="display:none">{{ $aitool['out_file_ext'] }}</p>
           </div>
         </div>
-        <p class="card__description">{{ $aitool['description']}}</p>
-      </div>
+
+
     </a>      
   </li>
 @endforeach
@@ -198,5 +169,70 @@ $('.favoriteButton').click(function() {
         window.location.href = '{{ route('login') }}';
     @endauth
 });
+
+if ('ontouchstart' in window) {
+    // Dispositivo touchscreen, attiva lo script
+    window.addEventListener('scroll', function() {
+        var cards = document.querySelectorAll('.card');
+        var windowHeight = window.innerHeight;
+        var sectionTop = windowHeight / 3;
+        var sectionBottom = windowHeight - sectionTop;
+
+        cards.forEach(function(card) {
+            var cardTop = card.getBoundingClientRect().top;
+            var cardBottom = card.getBoundingClientRect().bottom;
+
+            if (cardTop < sectionBottom && cardBottom > sectionTop) {
+                card.style.transform = 'scale(1.1)';
+            } else {
+                card.style.transform = 'none';
+            }
+        });
+    });
+}
+
+// Funzione per aggiornare il layout delle carte durante la ricerca
+function updateCardLayout() {
+    var cardContainers = document.querySelectorAll('.card-container');
+    cardContainers.forEach(function(container) {
+        var card = container.querySelector('.card');
+        if (card.style.display === 'none') {
+            container.style.display = 'none';
+        } else {
+            container.style.display = 'block'; 
+        }
+    });
+}
+
+    // Funzione per filtrare le card in base al nome del gioco
+    function filterCards(searchText) {
+        var cards = document.querySelectorAll('.card');
+        var visibleCardsCount = 0;
+
+        cards.forEach(function(card) {
+            var cardTitle = card.querySelector('.card__title').textContent.toLowerCase();
+            var cardHidden = card.querySelector('.hidden').textContent.toLowerCase();
+            if (searchText === '' || 
+    cardTitle.toLowerCase().includes(searchText.toLowerCase()) || 
+    cardHidden.toLowerCase().includes(searchText.toLowerCase())) {
+                card.style.display = 'flex'; // Mostra la card se il testo di ricerca è vuoto o corrisponde al nome del gioco
+                visibleCardsCount++;
+            } else {
+                card.style.display = 'none'; // Nascondi la card se il testo di ricerca non corrisponde al nome del gioco
+            }
+        });
+
+        // Aggiorna il layout delle carte solo se sono visibili carte filtrate
+        if (visibleCardsCount > 0) {
+            updateCardLayout();
+        }
+    }
+
+    // Ascolta gli eventi di input nell'elemento di input della search bar
+    document.getElementById('searchInput').addEventListener('input', function() {
+        var searchText = this.value.trim(); // Ottieni il testo di ricerca e rimuovi eventuali spazi vuoti iniziali e finali
+        filterCards(searchText); // Filtra le card in base al testo di ricerca
+    });
+
 </script>
     @endsection    

@@ -10,8 +10,9 @@ class ChartHistory extends Model
 
     protected $fillable =[
         'user_id',
-        'aitool_name',
+        'aitool_id',
         'file_name',
+        'fileb64',
         'inputs',
         'created_at'
     ];

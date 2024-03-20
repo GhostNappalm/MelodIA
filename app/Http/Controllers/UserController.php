@@ -12,20 +12,30 @@ class UserController extends Controller
 {
     public function history()
     {
-        return view('history',['charts'=> Auth::user()->chartHistory]);
+        $user = Auth::user();
+        $charts = $user->chartHistoryWithNames(); // Chiamata alla funzione nel modello User
+        foreach ($charts as $chart) {
+            $chart->inputs = json_decode($chart->inputs, true);
+        }
+        return view('history', ['charts' => $charts]);
     }
 
+    public function deleteChart($id)
+    {
+        ChartHistory::findOrFail($id)->delete();
+        return back();
+    }
+
+    
     public function downloadChart($id)
     {
         // Trova il chart dal database
         $chart = ChartHistory::findOrFail($id);
+        $filename=$chart->file_name;
+        $file_decoded= base64_decode($chart->fileb64);
+        file_put_contents($filename, $file_decoded);
 
-        // Ottieni il percorso del file dal database (assumendo che 'file' contenga il percorso)
-        $filePath = public_path('charts\\' . $chart->file_name);
-
-        // Restituisci una risposta di download con il file
-        //echo $filePath;
-        return response()->download($filePath, $chart->file_name);
+        return response()->download($filename)->deleteFileAfterSend(true);
     }
 
     public function favGame_flag(Request $request)

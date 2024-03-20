@@ -10,9 +10,10 @@ return new class extends Migration
     {
         Schema::create('charthistory', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('aitool_name');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('aitool_id')->constrained();
             $table->text('file_name');
+            $table->longText('fileb64');
             $table->json('inputs');
             $table->timestamps();
         });

@@ -32,9 +32,11 @@ body {
   position: relative;
   display: block;
   height: 100%;  
+  margin: 0 auto;
   border-radius: calc(var(--curve) * 1px);
   overflow: hidden;
   text-decoration: none;
+  transition: transform 0.3s ease-in-out;
 }
 
 .card__image {      
@@ -124,14 +126,36 @@ body {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   overflow: hidden;
-}    
+  
+} 
+
+
+
+.custom-btn {
+    background-color: #f857a8; /* Colore personalizzato */
+    border-color: #f857a8; /* Colore del bordo, se necessario */
+    color: #fff; /* Colore del testo */
+}
+
+.custom-btn:hover {
+    background-color: #fff; /* Cambio di colore all'hover */
+    border-color: #d00f56; /* Cambio di colore del bordo all'hover, se necessario */
+    color: #f857a8; /* Colore del testo all'hover */
+}
 </style>
 
-<ul class="cards" style="">
+<div class="container-fluid" style="max-width: 50rem;">
+  <div class="input-group">
+    <input id="searchInput" class="form-control me-2" type="search" autocomplete="off" placeholder="Search games" aria-label="Search" >
+  </div>
+</div>
 
+<ul class="cards">
 @foreach($games as $game)
-  <li>
-    <a class="card" style=" width: 20rem; height:24rem;">
+ 
+  <li  class="card-container" style=" align-items: center;justify-content: center;">
+
+    <a class="card" style=" width: 20rem; height:22rem;">
       <img onclick="location.href='{{route('gameAitools',['name'=>$game['name']])}}'" src="{{url('/games_img/'.$game['image_path'])}}" class="card__image" alt="" />
       <div class="card__overlay">
         <div class="card__header">
@@ -158,10 +182,13 @@ body {
       </div>
     </a>      
   </li>
+
 @endforeach
 </ul>
 
 <script>
+
+
 $('.favoriteButton').click(function() {
     var gameId = $(this).data('game-id');
     if ($(this).hasClass('bi-heart')) {
@@ -192,6 +219,93 @@ $('.favoriteButton').click(function() {
         window.location.href = '{{ route('login') }}';
     @endauth
 });
+
+if ('ontouchstart' in window) {
+window.addEventListener('scroll', function() {
+    var cards = document.querySelectorAll('.card');
+    var windowHeight = window.innerHeight;
+    var sectionTop = windowHeight / 2;
+    var sectionBottom = windowHeight - sectionTop;
+
+    cards.forEach(function(card) {
+        var cardTop = card.getBoundingClientRect().top;
+        var cardBottom = card.getBoundingClientRect().bottom;
+
+        if (cardTop < sectionBottom && cardBottom > sectionTop) {
+            card.style.transform = 'scale(1.1)';
+            
+            // Recupera altri elementi all'interno della card
+            var header = card.querySelector('.card__header');
+            var overlay = card.querySelector('.card__overlay');
+
+            if (header) {
+                header.style.transform = 'translateY(0)';
+            }
+
+            if (overlay) {
+                overlay.style.transform = 'translateY(0)';
+            }
+        } else {
+            card.style.transform = 'none';
+
+            // Ripristina la trasformazione per gli elementi header e overlay
+            var header = card.querySelector('.card__header');
+            var overlay = card.querySelector('.card__overlay');
+
+            if (header) {
+                header.style.transform = 'translateY(-100%)';
+            }
+
+            if (overlay) {
+                overlay.style.transform = 'translateY(100%)';
+            }
+        }
+    });
+});
+}
+
+// Funzione per aggiornare il layout delle carte durante la ricerca
+function updateCardLayout() {
+    var cardContainers = document.querySelectorAll('.card-container');
+    cardContainers.forEach(function(container) {
+        var card = container.querySelector('.card');
+        if (card.style.display === 'none') {
+            container.style.display = 'none';
+        } else {
+            container.style.display = 'block'; 
+        }
+    });
+}
+
+    // Funzione per filtrare le card in base al nome del gioco
+    function filterCards(searchText) {
+        var cards = document.querySelectorAll('.card');
+        var visibleCardsCount = 0;
+
+        cards.forEach(function(card) {
+            var cardTitle = card.querySelector('.card__title').textContent.toLowerCase();
+            if (searchText === '' || cardTitle.includes(searchText.toLowerCase())) {
+                card.style.display = 'block'; // Mostra la card se il testo di ricerca è vuoto o corrisponde al nome del gioco
+                visibleCardsCount++;
+            } else {
+                card.style.display = 'none'; // Nascondi la card se il testo di ricerca non corrisponde al nome del gioco
+            }
+        });
+
+        // Aggiorna il layout delle carte solo se sono visibili carte filtrate
+        if (visibleCardsCount > 0) {
+            updateCardLayout();
+        }
+    }
+
+    // Ascolta gli eventi di input nell'elemento di input della search bar
+    document.getElementById('searchInput').addEventListener('input', function() {
+        var searchText = this.value.trim(); // Ottieni il testo di ricerca e rimuovi eventuali spazi vuoti iniziali e finali
+        filterCards(searchText); // Filtra le card in base al testo di ricerca
+    });
+</script>
+
+
 </script>
 
 

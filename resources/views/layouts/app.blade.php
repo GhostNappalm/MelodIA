@@ -14,6 +14,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.0/font/bootstrap-icons.css" rel="stylesheet">
 
     <script src="{{ asset('js/app.js') }}"></script>
+    
 
 </head>
     <body>
@@ -28,11 +29,11 @@
                     <a id="home" href="{{ route('home') }}" class="nav-link active"><span class="nav-link-span"><span class="u-nav">Home</span></span></a>
                     <a id="games" href="{{ route('games') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Games</span></span></a>
                     <a id="chartGen" href="{{ route('aitools') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Chart Generators</span></span></a>
-                    <a id="editors" href="" class="nav-link"><span class="nav-link-span"><span class="u-nav">Editors</span></span></a>
+                    <!--<a id="editors" href="" class="nav-link"><span class="nav-link-span"><span class="u-nav">Editors</span></span></a>-->
                     @guest
                         <a id="login" href="{{ route('login') }}" class="nav-link"><span class="nav-link-span"><span class="u-nav">Login</span></span></a>
                     @else
-                        <a class="dropdown ">
+                        <a class="dropdown" >
                             <button class="dropbtn" style="transform: skew(-20deg);"><p style="transform: skew(20deg);" >{{Auth::user()->name}}</p></button>
                             <div class="dropdown-content"style="transform:translate(-2.1rem,-1rem) skew(-20deg) ;">
                                 <div onclick="location.href='{{ route('history',['name'=>Auth::user()->name]) }}'"><p style="margin: 0; transform: skew(20deg);">History</p></div>
@@ -40,6 +41,11 @@
                             document.getElementById('logout-form').submit();"><p style="margin: 0; transform: skew(20deg);">Logout</p></div>
                              </div>
                         </a>
+
+                        <a id="History" href="{{ route('history',['name'=>Auth::user()->name]) }}" class="nav-link dropdownMobile"><span class="nav-link-span"><span class="u-nav">History</span></span></a>
+                        <a id="Logout" href="{{ route('logout') }}" class="nav-link dropdownMobile" onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();"><span class="nav-link-span"><span class="u-nav">Logout</span></span></a>
+
 
 
                                        
@@ -51,9 +57,46 @@
         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                   @csrf
                               </form>
-        <main class="py-4" style=" margin-top: 4rem;">
+        <main class="py-4" style=" margin-top: 4rem;margin-bottom: 10rem">
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success">
+                    {{ $message }}
+                </div>     
+            @elseif ($message = Session::get('error'))
+                <div class="alert alert-danger">
+                    {{ $message }}
+                </div> 
+            @endif
+
             @yield('content')
         </main>
-    
+
+        <footer class="footer bg-white py-3">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4">
+                <h3>About MelodIA</h3>
+                <p>MelodIA is a web tool created to provide rhythm game creators and players with access to various open-source AI projects for chart generation. It aims to remove the need for programming skills, making these projects accessible to a wider audience.</p>
+            </div>
+            <div class="col-md-4">
+                <h3>Contact Us</h3>
+                <p>If you have any questions or feedback, feel free to contact us at <a href="mailto:info@melodia.com">info@melodia.com</a>.</p>
+            </div>
+            <div class="col-md-4">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr class="my-3"> <!-- Linea divisoria più sottile -->
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <p>&copy; 2024 MelodIA. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
     </body>
 </html>

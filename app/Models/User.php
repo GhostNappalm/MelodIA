@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
+
 
 class User extends Authenticatable
 {
@@ -56,5 +58,16 @@ class User extends Authenticatable
     public function chartHistory()
     {
         return $this->hasMany(ChartHistory::class);
+    }
+
+    public function chartHistoryWithNames()
+    {
+        $charthistories = DB::table('charthistory')
+        ->join('aitools', 'charthistory.aitool_id', '=', 'aitools.id')
+        ->select('charthistory.*', 'aitools.name as aitool_name')
+        ->where('charthistory.user_id','=', $this->id)
+        ->orderBy('charthistory.created_at','desc')
+        ->get();
+        return $charthistories;
     }
 }

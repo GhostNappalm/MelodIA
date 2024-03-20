@@ -12,7 +12,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Aitool Name</th>
+                            <th>Aitool</th>
                             <th>File</th>
                             <th>Inputs</th>
                             <th>Date</th>
@@ -22,16 +22,25 @@
                         @foreach($charts as $chart)
                             <tr>                           
                                 <td>
-                                    <a href="#">{{ $chart['aitool_name'] }}</a>
+                                    <a href="{{ route('Aitool',['name'=>$chart->aitool_name])}}">{{ $chart->aitool_name }}</a>
                                 </td>
                                 <td>
-                                    <a href="{{ route('download.chart', $chart['id']) }}" download>{{ $chart['file_name'] }}</a>
+                                    <a href="{{ route('download_chart',['id'=>$chart->id]) }}">{{ $chart->file_name }}</a>
                                 </td>
                                 <td>
-                                    {{ $chart['inputs'] }}
+                                    @php
+                                        $inputs = json_decode($chart->inputs, true); // Decodifica il JSON in un array associativo
+                                    @endphp
+
+                                    @foreach($inputs as $label => $value)
+                                        <p>{{ $label }}: {{ $value }}</p>
+                                    @endforeach
                                 </td>
                                 <td>
-                                    {{ $chart['created_at'] }}
+                                    {{ $chart->created_at }}
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger" style="color:white" onclick="return confirm('Are you sure?')" href="{{route('deleteChart', ['id'=>$chart->id])}}"><i class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                         @endforeach

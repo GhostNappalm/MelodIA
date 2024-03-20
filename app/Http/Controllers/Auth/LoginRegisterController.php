@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+
+
 class LoginRegisterController extends Controller
 {
     /**
@@ -16,7 +18,7 @@ class LoginRegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except([
-            'logout', 'dashboard'
+            'logout', 'home'
         ]);
     }
 
@@ -39,9 +41,9 @@ class LoginRegisterController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:250',
-            'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed'
+            'name' => 'required|string|max:12|unique:users',
+            'email' => 'required|email|max:30|unique:users',
+            'password' => 'required|min:8|max:20|confirmed'
         ]);
 
         User::create([
@@ -53,7 +55,7 @@ class LoginRegisterController extends Controller
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
         $request->session()->regenerate();
-        return redirect()->route('dashboard')
+        return redirect()->route('home')
         ->withSuccess('You have successfully registered & logged in!');
     }
 
@@ -83,33 +85,16 @@ class LoginRegisterController extends Controller
         if(Auth::attempt($credentials))
         {
             $request->session()->regenerate();
-            return redirect()->route('dashboard')
-                ->withSuccess('You have successfully logged in!');
+            return response()->redirectToRoute('home')->with('success', 'You have successfully logged in!');
         }
 
-        return response()->withErrors([
+        return response()->redirectToRoute('login')->withErrors([
             'email' => 'Your provided credentials do not match in our records.',
         ])->onlyInput('email');
 
     } 
     
-    /**
-     * Display a dashboard to authenticated users.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function dashboard()
-    {
-        if(Auth::check())
-        {
-            return response()->view('auth.dashboard');
-        }
-        
-        return response()->view('auth.login')
-        ->withErrors([
-            'email' => 'Please login to access the dashboard.',
-        ])->onlyInput('email');
-    } 
+  
     
     /**
      * Log out the user from application.

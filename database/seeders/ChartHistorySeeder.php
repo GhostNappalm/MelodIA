@@ -12,15 +12,17 @@ class ChartHistorySeeder extends Seeder
     {
         $chartHistory = new ChartHistory();
         $chartHistory->user_id = 11;
-        $chartHistory->aitool_name = 'AI tool 1';
-        $chartHistory->file_name = 'osuchart.osz';
+        $chartHistory->aitool_id = 1;
+        $chartHistory->file_name = 'chartA.dwi';
+        $chartHistory->fileb64 = 'test';
         $chartHistory->inputs = json_encode(['BPM' => '100','Difficulty' => 'Medium', 'Style' => 'Endurance' ]);
         $chartHistory->save();
 
         $chartHistory = new ChartHistory();
         $chartHistory->user_id = 11;
-        $chartHistory->aitool_name = 'AI tool 3';
-        $chartHistory->file_name = 'osuchart.osz';
+        $chartHistory->aitool_id = 2;
+        $chartHistory->file_name = 'chartB.dwi';
+        $chartHistory->fileb64 = 'test';
         $chartHistory->inputs = json_encode(['BPM' => '120','Difficulty' => 'Hard' ]);
         $chartHistory->save();
         

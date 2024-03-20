@@ -13,7 +13,10 @@ class Aitool extends Model
         'name',
         'authors',
         'description',
-        'inputs'
+        'inputs',
+        'method',
+        'endpoint',
+        'out_file_ext'
     ];
 
     protected $casts = [

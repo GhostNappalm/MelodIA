@@ -11,15 +11,30 @@ class GameAitoolSeeder extends Seeder
 {
     public function run(): void
     {
-        $game1 = Game::find(1);
-        $game2 = Game::find(2);
+        $Stepmania = Game::find(1);
+        $osu = Game::find(2);
+        $ITG = Game::find(3);
+        $osuTaiko = Game::find(4);
 
-        $aitool1 = Aitool::find(1);
-        $aitool2 = Aitool::find(2);
-        
-        $game1->aiTools()->attach($aitool1);
-        $game1->aiTools()->attach($aitool2);
+        $Stepmania->aiTools()->attach(Aitool::find(1));
+        $Stepmania->aiTools()->attach(Aitool::find(2));
+        $Stepmania->aiTools()->attach(Aitool::find(6));
 
-        $game2->aiTools()->attach($aitool2);
+        $osu->aiTools()->attach(Aitool::find(3));
+        $osu->aiTools()->attach(Aitool::find(4));
+        $osu->aiTools()->attach(Aitool::find(5));
+
+        $ITG->aiTools()->attach(Aitool::find(1));
+        $ITG->aiTools()->attach(Aitool::find(2));
+        $ITG->aiTools()->attach(Aitool::find(6));
+
+
+        $osuTaiko->aiTools()->attach(Aitool::find(3));
+        $osuTaiko->aiTools()->attach(Aitool::find(4));
+        $osuTaiko->aiTools()->attach(Aitool::find(5));
+
+
+
+
     }
 }

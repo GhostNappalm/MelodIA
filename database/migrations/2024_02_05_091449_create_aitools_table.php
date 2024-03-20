@@ -12,9 +12,12 @@ return new class extends Migration
         Schema::create('aitools', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('autors');
+            $table->string('authors');
             $table->text('description');
             $table->json('inputs')->nullable();
+            $table->string('method');
+            $table->string('endpoint');
+            $table->string('out_file_ext');
             $table->timestamps();
         });
     }
