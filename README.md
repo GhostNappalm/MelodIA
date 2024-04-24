@@ -1,5 +1,9 @@
 Laravel 10.10
+
+
 PHP 8.1
+
+
 XAMPP v3.3.0
 
 
